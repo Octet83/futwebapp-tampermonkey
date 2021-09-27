@@ -59,15 +59,8 @@ export class FutbinPlayerLinks extends BaseScript {
           let btn = $('#futbinPlayerLink');
           btn.find('.btn-text').html('Searching on Futbin ...');
           const futbinLink = await FutbinPlayerLinks._getFutbinPlayerUrl(selectedItem);
-          console.log('Obtained link on futbin '+futbinLink);
           selectedItem = this._getSelectedItem();
           btn = $('#futbinPlayerLink');
-          console.log('Selected item ');
-          console.log(selectedItem);
-
-
-          console.log('Btn futbin ');
-          console.log(btn);
 
           if (btn.data('resource-id') === selectedItem.id) {
             if (futbinLink) {
@@ -89,7 +82,7 @@ export class FutbinPlayerLinks extends BaseScript {
       }
 
       let futbinPlayerIds = Database.getJson('futbin-player-ids', []);
-      const futbinPlayer = futbinPlayerIds.find(i => i.id === item.resourceId);
+      const futbinPlayer = futbinPlayerIds.find(i => i.id === item.id);
       if (futbinPlayer != null) {
         return resolve(`https://www.futbin.com/22/player/${futbinPlayer.futbinId}`);
       }

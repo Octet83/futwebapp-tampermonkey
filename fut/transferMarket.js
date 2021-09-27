@@ -202,9 +202,8 @@ export class TransferMarket {
     // TODO: check if this can handle other items as well
     // eslint-disable-next-line no-undef
     const searchCriteria = new UTSearchCriteriaDTO();
-
     searchCriteria.count = 30;
-    searchCriteria.maskedDefId = item.getMaskedResourceId();
+    searchCriteria.maskedDefId = item.definitionId;
     searchCriteria.type = item.type;
 
     if (item.rareflag === 47) { // 47 = Champions
@@ -219,8 +218,8 @@ export class TransferMarket {
         .filter(d => d.id === 3)[0].value;
     }
 
-    searchCriteria.category = enums.SearchCategory.ANY;
-    searchCriteria.position = enums.SearchType.ANY;
+    searchCriteria.category = SearchCategory.ANY;
+    searchCriteria.position = SearchType.ANY;
     if (maxBuy !== -1) {
       searchCriteria.maxBuy = maxBuy;
     }

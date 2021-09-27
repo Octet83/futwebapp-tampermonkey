@@ -244,13 +244,14 @@ export class FutbinPrices extends BaseScript {
 
     const resourceIdMapping = [];
 
+
     listrows
-      .filter(row => row.data.type === 'player' && row.data.resourceId !== 0)
+      .filter(row => row.data.type === 'player' && row.data.definitionId !== 0)
       .forEach((row, index) => {
         $(row.__auction).show();
         resourceIdMapping.push({
           target: uiItems[index] || row.target,
-          playerId: row.data.resourceId,
+          playerId: row.data.definitionId,
           item: row.data,
         });
       });
@@ -276,7 +277,8 @@ export class FutbinPrices extends BaseScript {
             GM_notification(`Could not load Futbin prices (code ${res.status}), pausing fetches for 5 minutes. Disable Futbin integration if the problem persists.`, 'Futbin fetch failed');
             return;
           }
-
+          console.log('response from futbin :');
+          console.log(res);
           const futbinData = JSON.parse(res.response);
           resourceIdMapping.forEach((item) => {
             FutbinPrices._showFutbinPrice(screen, item, futbinData, showBargains);
@@ -307,25 +309,32 @@ export class FutbinPrices extends BaseScript {
     }
     const target = $(item.target);
     const { playerId } = item;
-
+    console.log('Init showfutbin price');
     if (target.find('.player').length === 0) {
       // not a player
+    console.log('Not a player');
+
       return;
     }
 
     const platform = utils.getPlatform();
 
     if (!futbinData[playerId]) {
+    console.log('Data not available ');
+
       return; // futbin data might not be available for this player
     }
 
     let targetForButton = null;
 
     if (target.find('.futbin').length > 0) {
+    console.log('already added ');
+
       return; // futbin price already added to the row
     }
 
     const futbinText = 'Futbin BIN';
+    console.log('Screen: '+screen);
 
     switch (screen) {
       case 'SBCSquadSplitViewController':
@@ -350,6 +359,7 @@ export class FutbinPrices extends BaseScript {
       case 'UTUnassignedItemsSplitViewController':
       case 'ClubSearchResultsSplitViewController':
       case 'UTMarketSearchResultsSplitViewController':
+        console.log('Should show FUTBIN price here');
         $('.secondary.player-stats-data-component').css('float', 'left');
         target.find('.auction').prepend(`
         <div class="auctionValue futbin">
