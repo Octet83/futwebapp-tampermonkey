@@ -277,8 +277,6 @@ export class FutbinPrices extends BaseScript {
             GM_notification(`Could not load Futbin prices (code ${res.status}), pausing fetches for 5 minutes. Disable Futbin integration if the problem persists.`, 'Futbin fetch failed');
             return;
           }
-          console.log('response from futbin :');
-          console.log(res);
           const futbinData = JSON.parse(res.response);
           resourceIdMapping.forEach((item) => {
             FutbinPrices._showFutbinPrice(screen, item, futbinData, showBargains);
@@ -309,7 +307,6 @@ export class FutbinPrices extends BaseScript {
     }
     const target = $(item.target);
     const { playerId } = item;
-    console.log('Init showfutbin price');
     if (target.find('.player').length === 0) {
       // not a player
     console.log('Not a player');
@@ -334,8 +331,6 @@ export class FutbinPrices extends BaseScript {
     }
 
     const futbinText = 'Futbin BIN';
-    console.log('Screen: '+screen);
-
     switch (screen) {
       case 'SBCSquadSplitViewController':
       case 'SquadSplitViewController':

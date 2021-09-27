@@ -52,7 +52,6 @@ export class FutbinPlayerLinks extends BaseScript {
 
         const futbinPlayerLink = $(mutation.target).find('#futbinPlayerLink');
         futbinPlayerLink.remove();
-        console.log(selectedItem);
         $(mutation.target).find('.DetailPanel > .ut-button-group').prepend(`<button id="futbinPlayerLink" data-resource-id="${selectedItem.id}" class="list"><span class="btn-text">View on Futbin</span><span class="btn-subtext"></span></button>`);
 
         $('#futbinPlayerLink').bind('click', async () => {
@@ -89,13 +88,10 @@ export class FutbinPlayerLinks extends BaseScript {
 
       const name = `${item._staticData.firstName} ${item._staticData.lastName}`.replace(' ', '+');
       const url = `https://www.futbin.com/search?year=22&term=${name}`;
-      console.log('Searching '+name+' on futbin');
       return GM_xmlhttpRequest({
         method: 'GET',
         url,
         onload: (res) => {
-          console.log(res.status);
-          console.log(res.response);
           if (res.status !== 200) {
             return resolve(null);
           }
@@ -119,7 +115,6 @@ export class FutbinPlayerLinks extends BaseScript {
             return resolve(`https://www.futbin.com/22/player/${exactPlayers[0].id}`);
           } else if (exactPlayers.length > 1) {
             // Take first one, several players are returned more than once
-            console.log('Multi players found');
             return resolve(`https://www.futbin.com/22/player/${exactPlayers[0].id}`);
           }
 
