@@ -3,6 +3,10 @@
   "version": "0.0.0-development",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
   "scripts": {
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1",

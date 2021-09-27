@@ -1,7 +1,7 @@
 /* globals
 window $ document
 */
-import { analytics, BaseScript, SettingsEntry } from '../core';
+import { BaseScript, SettingsEntry } from '../core';
 import { TransferMarket, priceTiers } from '../../fut';
 
 export class MinBinSettings extends SettingsEntry {
@@ -67,20 +67,19 @@ class MinBin extends BaseScript {
 
           this._updateListPrice(knownPlayerPrice.minimumBin);
         }
-        $(mutation.target).find('.DetailPanel > .ut-button-group').prepend(`<button id="searchMinBin" data-resource-id="${selectedItem.resourceId}" class="list"><span class="btn-text">Search minimum BIN ${price}</span><span class="btn-subtext"></span></button>`);
+        $(mutation.target).find('.DetailPanel > .ut-button-group').prepend(`<button id="searchMinBin" data-resource-id="${selectedItem.id}" class="list"><span class="btn-text">Search minimum BIN ${price}</span><span class="btn-subtext"></span></button>`);
 
         $('#searchMinBin').bind('click', async () => {
           const btn = $('#searchMinBin');
           btn.find('.btn-text').html('Searching minimum BIN...');
-          analytics.trackEvent('Min BIN', 'Search Min BIN', btn.data('resource-id'));
           const settings = this.getSettings();
           const minimumBin = await new TransferMarket().searchMinBuy(selectedItem, parseInt(settings['mean-count'], 10));
-          const playerPrice = this._playerPrices.find(p => p.resourceId === btn.data('resource-id'));
+          const playerPrice = this._playerPrices.find(p => p.id === btn.data('resource-id'));
           if (playerPrice != null) {
             this._playerPrices.splice(this._playerPrices.indexOf(playerPrice), 1);
           }
           this._playerPrices.push({
-            resourceId: btn.data('resource-id'),
+            id: btn.data('resource-id'),
             minimumBin,
           });
 

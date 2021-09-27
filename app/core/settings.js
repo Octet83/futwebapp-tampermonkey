@@ -1,7 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
 
-import analytics from './analytics';
-
 export class Settings extends EventEmitter {
   constructor() {
     super();
@@ -40,7 +38,6 @@ export class Settings extends EventEmitter {
 
     entries[0].toggle();
 
-    analytics.trackEvent('Settings', `Toggle setting ${id}`, entries[0].isActive);
     this._emitEvent(entries[0]);
   }
 

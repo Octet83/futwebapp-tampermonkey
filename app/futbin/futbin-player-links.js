@@ -1,7 +1,7 @@
 /* globals
 window $ document
 */
-import { analytics, BaseScript, Database } from '../core';
+import { BaseScript, Database } from '../core';
 import { FutbinSettings } from './settings-entry';
 
 export class FutbinPlayerLinks extends BaseScript {
@@ -46,26 +46,32 @@ export class FutbinPlayerLinks extends BaseScript {
         }
 
         let selectedItem = this._getSelectedItem();
-        if (selectedItem == null || selectedItem.resourceId === 0) {
+        if (selectedItem == null || selectedItem.id === 0) {
           return;
         }
 
         const futbinPlayerLink = $(mutation.target).find('#futbinPlayerLink');
         futbinPlayerLink.remove();
-
-        $(mutation.target).find('.DetailPanel > .ut-button-group').prepend(`<button id="futbinPlayerLink" data-resource-id="${selectedItem.resourceId}" class="list"><span class="btn-text">View on Futbin</span><span class="btn-subtext"></span></button>`);
+        console.log(selectedItem);
+        $(mutation.target).find('.DetailPanel > .ut-button-group').prepend(`<button id="futbinPlayerLink" data-resource-id="${selectedItem.id}" class="list"><span class="btn-text">View on Futbin</span><span class="btn-subtext"></span></button>`);
 
         $('#futbinPlayerLink').bind('click', async () => {
           let btn = $('#futbinPlayerLink');
           btn.find('.btn-text').html('Searching on Futbin ...');
           const futbinLink = await FutbinPlayerLinks._getFutbinPlayerUrl(selectedItem);
-
+          console.log('Obtained link on futbin '+futbinLink);
           selectedItem = this._getSelectedItem();
           btn = $('#futbinPlayerLink');
-          if (btn.data('resource-id') === selectedItem.resourceId) {
+          console.log('Selected item ');
+          console.log(selectedItem);
+
+
+          console.log('Btn futbin ');
+          console.log(btn);
+
+          if (btn.data('resource-id') === selectedItem.id) {
             if (futbinLink) {
               btn.find('.btn-text').html('View on Futbin');
-              analytics.trackEvent('Futbin', 'Show player on Futbin', btn.data('resource-id'));
               window.open(futbinLink);
             } else {
               btn.find('.btn-text').html('No exact Futbin player found');
@@ -85,15 +91,18 @@ export class FutbinPlayerLinks extends BaseScript {
       let futbinPlayerIds = Database.getJson('futbin-player-ids', []);
       const futbinPlayer = futbinPlayerIds.find(i => i.id === item.resourceId);
       if (futbinPlayer != null) {
-        return resolve(`https://www.futbin.com/21/player/${futbinPlayer.futbinId}`);
+        return resolve(`https://www.futbin.com/22/player/${futbinPlayer.futbinId}`);
       }
 
       const name = `${item._staticData.firstName} ${item._staticData.lastName}`.replace(' ', '+');
-      const url = `https://www.futbin.com/search?year=21&term=${name}`;
+      const url = `https://www.futbin.com/search?year=22&term=${name}`;
+      console.log('Searching '+name+' on futbin');
       return GM_xmlhttpRequest({
         method: 'GET',
         url,
         onload: (res) => {
+          console.log(res.status);
+          console.log(res.response);
           if (res.status !== 200) {
             return resolve(null);
           }
@@ -114,14 +123,20 @@ export class FutbinPlayerLinks extends BaseScript {
               });
             }
             Database.setJson('futbin-player-ids', futbinPlayerIds);
-            return resolve(`https://www.futbin.com/21/player/${exactPlayers[0].id}`);
+            return resolve(`https://www.futbin.com/22/player/${exactPlayers[0].id}`);
           } else if (exactPlayers.length > 1) {
             // Take first one, several players are returned more than once
-            return resolve(`https://www.futbin.com/21/player/${exactPlayers[0].id}`);
+            console.log('Multi players found');
+            return resolve(`https://www.futbin.com/22/player/${exactPlayers[0].id}`);
           }
 
           return resolve(null); // TODO: what should we do if we find more than one?
         },
+        onerror:(res) => {
+          console.log('Error futbin');
+          console.log(res);
+          return resolve(null); 
+        }
       });
     });
   }

@@ -12,9 +12,6 @@ module.exports = {
   },
   devtool: 'eval-source-map',
   plugins: [
-    new webpack.DefinePlugin({
-        'UA_TOKEN': JSON.stringify('UA-126264296-1')
-    })
   ],
   module: {
     rules: [

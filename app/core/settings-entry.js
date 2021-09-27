@@ -6,7 +6,7 @@ export class SettingsEntry {
 
     this.id = id;
     this.name = name;
-    this.isActive = settings.isActive ? settings.isActive : false;
+    this.isActive = true;//settings.isActive ? settings.isActive : false;
     this.settings = [];
   }
 

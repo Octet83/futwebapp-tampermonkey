@@ -4,7 +4,7 @@ import 'babel-polyfill';
 import './index.scss';
 import initSettingsScreen from './settings';
 
-import { analytics, Settings, Queue } from './core';
+import { Settings, Queue } from './core';
 
 import { Logger } from '../fut';
 /*
@@ -38,7 +38,6 @@ window.currentPage = '';
 
 UTGameFlowNavigationController.prototype.didPush = (t) => {
   if (t) {
-    analytics.trackPage(t.className);
     window.onPageNavigation.notify(t.className);
     window.currentPage = t.className;
   }
@@ -46,7 +45,6 @@ UTGameFlowNavigationController.prototype.didPush = (t) => {
 
 UTViewController.prototype.didPresent = (t) => {
   if (t) {
-    analytics.trackPage(t.className);
     window.onPageNavigation.notify(t.className);
     window.currentPage = t.className;
   }
