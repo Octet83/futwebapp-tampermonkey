@@ -32,9 +32,11 @@ class CardInfo extends BaseScript {
       subtree: true,
     };
 
-    setTimeout(() => {
-      this._observer.observe($(document)[0], obsConfig);
-    }, 0);
+    if($(document) != undefined) {
+      setTimeout(() => {
+        this._observer.observe($(document)[0], obsConfig);
+      }, 0);
+    }
   }
 
   deactivate(state) {

@@ -273,6 +273,8 @@ export class FutbinPrices extends BaseScript {
         url: futbinUrl,
         onload: (res) => {
           if (res.status !== 200) {
+            console.log('Futbin fetch failed ');
+            console.log(res);
             Database.set('lastFutbinFetchFail', Date.now());
             GM_notification(`Could not load Futbin prices (code ${res.status}), pausing fetches for 5 minutes. Disable Futbin integration if the problem persists.`, 'Futbin fetch failed');
             return;

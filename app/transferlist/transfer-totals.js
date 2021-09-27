@@ -43,6 +43,7 @@ class TransferTotals extends BaseScript {
   }
 
   _mutationHandler(mutationRecords) {
+    console.log('In mutation handler');
     const settings = this.getSettings();
     mutationRecords.forEach((mutation) => {
       if (
@@ -62,14 +63,9 @@ class TransferTotals extends BaseScript {
           return;
         }
 
-        if (!settings.isActive || settings['show-transfer-totals'].toString() !== 'true') {
-          return;
-        }
-
         const lists = $('.ut-transfer-list-view .itemList');
         const items = controller._listController._viewmodel._collection;
         const listRows = $('.ut-transfer-list-view .listFUTItem');
-
         lists.each((index, list) => {
           const totals = {
             futbin: 0,
@@ -105,6 +101,10 @@ class TransferTotals extends BaseScript {
             .reduce((sum, item) => sum + item._auction.buyNowPrice, 0);
 
           const totalsItem = listEl.prev('.transfer-totals');
+
+
+          console.log('total');
+          console.log(totals);
 
           if (!totalsItem.length) {
             $(`<div class="transfer-totals">
